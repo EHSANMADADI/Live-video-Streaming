@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Example</title>
+</head>
+<body>
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/simple-peer/simplepeer.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3000');
+
+        let localStream;
+        let peer;
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(stream => {
+                localStream = stream;
+                document.getElementById('localVideo').srcObject = stream;
+
+                peer = new SimplePeer({
+                    initiator: location.hash === '#1',
+                    stream: localStream,
+                    trickle: false,
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:195.191.45.56:3478'},
+                            { urls: 'turn:195.191.45.56:3478', username: 'test', credential: 'test123' }
+                        ]
+                    }
+                });
+
+                peer.on('signal', data => {
+                    socket.emit('offer', data);
+                });
+
+                socket.on('offer', data => {
+                    peer.signal(data);
+                });
+
+                peer.on('stream', stream => {
+                    document.getElementById('remoteVideo').srcObject = stream;
+                });
+
+                socket.on('candidate', (data) => {
+                    peer.signal(data);
+                });
+
+                peer.on('error', err => console.error(err));
+            })
+            .catch(err => console.error('Failed to get local stream', err));
+    </script>
+</body>
+</html>
