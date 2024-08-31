@@ -14,12 +14,7 @@ const io = socketIo(server,{
         methods: ['GET', 'POST'],
     }
 });
-// تنظیمات CORS
-// app.use(cors({
-//     origin: 'http://127.0.0.1:5500', // یا استفاده از '*' برای اجازه به تمام منابع
-//     methods: ["GET", "POST"], // می‌توانید متدهای مجاز را مشخص کنید
-//     credentials: true // اگر نیاز به ارسال کوکی یا هدرهای خاصی دارید، این گزینه را فعال کنید
-// }));
+
 
 io.on('connection', (socket) => {
     console.log('New client connected');
