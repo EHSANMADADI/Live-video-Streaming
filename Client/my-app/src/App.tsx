@@ -1,15 +1,13 @@
-import React,{useEffect} from 'react';
-import socketIO from 'socket.io-client'
-import './App.css';
+import React, { useEffect } from "react";
+import "./App.css";
+import "./index.css";
+import CreateBtn from "./Componnent/CreateBtn";
 
-const WS="http://localhost:3000"
 function App() {
-  useEffect(()=>{
-    socketIO(WS)
-  },[])
   return (
-    <div className="App">
-    <button> conect to room</button>
+    <div className="flex w-screen items-center h-screen justify-center">
+      <CreateBtn />
+      
     </div>
   );
 }

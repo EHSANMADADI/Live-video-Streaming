@@ -4,12 +4,13 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+// const { roomHandeler } = require('./room/index.ts');
 const app = express();
 app.use(cors);
 const server = http.createServer(app);
 
-const io = socketIo(server,{
-    cors:{
+const io = socketIo(server, {
+    cors: {
         origin: '*',
         methods: ['GET', 'POST'],
     }
@@ -18,6 +19,14 @@ const io = socketIo(server,{
 
 io.on('connection', (socket) => {
     console.log('New client connected');
+
+    socket.on("create-room", ()=>{
+        console.log('user creat a room');
+        
+    });
+    socket.on("join-room", ()=>{
+        console.log('user join');
+    });
 
     socket.on('offer', (data) => {
         socket.broadcast.emit('offer', data);
