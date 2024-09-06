@@ -7,11 +7,11 @@ export default function VideoPlayer({ stream }: { stream: MediaStream }) {
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
     }
-  }, [stream]);
+  }, []);
   
   return (
     <div>
-      <video ref={videoRef} autoPlay />
+      <video ref={videoRef} autoPlay muted={true} />
     </div>
   );
 }
